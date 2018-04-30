@@ -1,2 +1,40 @@
 # instant-googlespreadsheet-output
 PHPからさくっとGoogleSpreadSheetを新規作成してデータの挿入をやるやつ
+
+## 動機
+Webシステムの集計データとか調査データをさくっと他の人に共有したいときにスプレッドシートに直で吐き出したら楽だと思ったので。
+
+スプレッドシートに吐き出すライブラリはあるにはあるけど、先に手動でシートを作ってからみたいのが多くて、欲しかったのはデータの配列突っ込んだらスプレッドシートのURLを返すというそれだけのシンプルなものなので作りました。
+
+いつのまにかGoogleAnalyticsで集計データのアウトプット先にスプレッドシートが追加されていて、便利だなーと思ったのが発端です。（以前はCSVダウンロードとかだけだった気がします。）
+
+
+## 準備
+GoogleApisのサービスアカウントが必要（そのうち書く）
+
+
+## 使い方
+
+```
+// create instanse
+$outputer = new InstantGoogleSpreadSheetOutput('/Path/to/youte/spreadsheet-xxxxxxxxx.json');
+
+// create new SpreadSheet
+$response = $outputer->creatSheet();
+
+// insert data
+$data = [
+	['日','月','火','水','木','金','土'],
+	['あれ','これ','それ','これ？','どれ？','それ','えっ'],
+];
+$outputer->write($response['spreadsheetId'],$data);
+
+// permit others to access this sheet
+$outputer->attatchAuthToUser($response['spreadsheetId'],'test[at]gmail.com');
+echo $response['spreadsheetUrl'];
+```
+
+## やること
+
+[ ] composerでinstallできるように体裁整える
+[ ] リポジトリ名がなんかださい
