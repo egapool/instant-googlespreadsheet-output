@@ -17,7 +17,7 @@ GoogleApisのサービスアカウントが必要（そのうち書く）
 
 ```
 // create instanse
-$outputer = new InstantGoogleSpreadSheetOutput('/Path/to/youte/spreadsheet-xxxxxxxxx.json');
+$outputer = new InstantGoogleSpreadSheetOutput('/path/to/youre/spreadsheet-xxxxxxxxx.json');
 
 // create new SpreadSheet
 $response = $outputer->creatSheet();
@@ -36,5 +36,5 @@ echo $response['spreadsheetUrl'];
 
 ## やること
 
-[ ] composerでinstallできるように体裁整える
-[ ] リポジトリ名がなんかださい
+* composerでinstallできるように体裁整える
+* リポジトリ名がなんかださい
