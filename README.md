@@ -1,0 +1,2 @@
+# instant-googlespreadsheet-output
+PHPからさくっとGoogleSpreadSheetを新規作成してデータの挿入をやるやつ
