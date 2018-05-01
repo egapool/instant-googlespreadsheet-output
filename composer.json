@@ -1,5 +1,22 @@
 {
-	"require": {
-		"google/apiclient": "^2.0"
-	}
+    "name": "egapool/instant-googlespreadsheet-output",
+    "description": "Instant Google Spread Sheet Outputer",
+    "keywords": ["spreadsheet","php","easy"],
+    "type": "library",
+    "license": "MIT",
+    "homepage":"https://github.com/egapool/instant-googlespreadsheet-output",
+    "authors": [
+        {
+            "name": "egapool",
+            "email": "egpersent@gmail.com"
+        }
+    ],
+    "require": {
+        "google/apiclient": "^2.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "InstantGoogleSpreadSheetOutput\\": "src/InstantGoogleSpreadSheetOutput"
+        }
+    }
 }

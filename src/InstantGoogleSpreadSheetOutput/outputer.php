@@ -1,9 +1,20 @@
 <?php
+
+namespace InstantGoogleSpreadSheetOutput;
+
+use Google_Client;
+use Google_Service_Drive;
+use Google_Service_Sheets;
+use Google_Service_Sheets_Spreadsheet;
+use Google_Service_Sheets_Request;
+use Google_Service_Sheets_BatchUpdateSpreadsheetRequest;
+use Google_Service_Sheets_ValueRange;
+use Google_Service_Sheets_BatchUpdateValuesRequest;
+use Google_Service_Drive_Permission;
+
 date_default_timezone_set('Asia/tokyo');
 
-require_once __DIR__.'/vendor/autoload.php';
-
-class InstantGoogleSpreadSheetOutput
+class Outputer
 {
 	/**
 	 * @var \Google_Client $client
@@ -30,10 +41,10 @@ class InstantGoogleSpreadSheetOutput
 	public function __construct($GOOGLE_APPLICATION_CREDENTIALS)
 	{
 		putenv('GOOGLE_APPLICATION_CREDENTIALS='.$GOOGLE_APPLICATION_CREDENTIALS);
-		$this->client = new \Google_Client();
+		$this->client = new Google_Client();
 		$this->client->useApplicationDefaultCredentials();
-		$this->client->addScope(\Google_Service_Drive::DRIVE);
-		$this->service = new \Google_Service_Sheets($this->client);
+		$this->client->addScope(Google_Service_Drive::DRIVE);
+		$this->service = new Google_Service_Sheets($this->client);
 
 		return $this;
 	}
@@ -46,7 +57,7 @@ class InstantGoogleSpreadSheetOutput
 	public function creatSheet()
 	{
 		// TODO: Assign values to desired properties of `requestBody`:
-		$requestBody = new \Google_Service_Sheets_Spreadsheet();
+		$requestBody = new Google_Service_Sheets_Spreadsheet();
 		$this->spreadsheet = $this->service->spreadsheets->create($requestBody);
 
 		return $this;
@@ -69,7 +80,7 @@ class InstantGoogleSpreadSheetOutput
 		if ( count($inputData) > $default_rows)
 		{
 			$requests = [
-				new \Google_Service_Sheets_Request([
+				new Google_Service_Sheets_Request([
 					'appendDimension' => [
 						'sheetId' => 0,
 						'dimension' => 'ROWS',
@@ -88,14 +99,14 @@ class InstantGoogleSpreadSheetOutput
 		{
 			if (!is_array($row)) $row = [$row];
 
-			$data[] = new \Google_Service_Sheets_ValueRange([
+			$data[] = new Google_Service_Sheets_ValueRange([
 				'range' => 'Sheet1!A'.$row_num,
 				'values' => [$row],
 			]);
 			$row_num++;
 		}
 
-		$body = new \Google_Service_Sheets_BatchUpdateValuesRequest(array(
+		$body = new Google_Service_Sheets_BatchUpdateValuesRequest(array(
 			'valueInputOption' => 'RAW',
 			'data' => $data
 		));
@@ -114,14 +125,14 @@ class InstantGoogleSpreadSheetOutput
 	public function attatchAuthToUser($userGMailAddress)
 	{
 		// Google Drive ApisのPermission resourceを作成
-		$permission = new \Google_Service_Drive_Permission([
+		$permission = new Google_Service_Drive_Permission([
 			'type'  => 'user',
 			'role'  => 'writer',
 			'emailAddress' => $userGMailAddress,
 		]);
 
 		// Permission resourceを割り当て
-		$response = (new \Google_Service_Drive($this->client))
+		$response = (new Google_Service_Drive($this->client))
 			->permissions
 			->create($this->spreadsheet->spreadsheetId,$permission);
 
