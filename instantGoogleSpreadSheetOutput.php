@@ -18,6 +18,12 @@ class InstantGoogleSpreadSheetOutput
 	public $service;
 
 	/**
+	 * @var \Google_Service_Sheets_Spreadsheet $service
+	 * 
+	 */
+	public $spreadsheet;
+
+	/**
 	 * @param string PATH_TO_YOURE_CREDENTIALS.json サービスアカウントの秘密鍵
 	 * @return self
 	 */
@@ -35,25 +41,25 @@ class InstantGoogleSpreadSheetOutput
 	/**
 	 * 新しくスプレッドシートを作成
 	 * 
-	 * @return \Google_Service_Sheets_Spreadsheet $response
+	 * @return self
 	 */
 	public function creatSheet()
 	{
 		// TODO: Assign values to desired properties of `requestBody`:
 		$requestBody = new \Google_Service_Sheets_Spreadsheet();
-		$response = $this->service->spreadsheets->create($requestBody);
-		return $response;
+		$this->spreadsheet = $this->service->spreadsheets->create($requestBody);
+
+		return $this;
 	}
 
 	/**
 	 * スプレッドシートにデータを書き込む
 	 * 
-	 * @param string $spreadsheetId
 	 * @param array $inputData 配列の配列
-	 * @return \Google_Service_Sheets_BatchUpdateValuesResponse $resopnse
+	 * @return self
 	 * 
 	 */
-	public function write($spreadsheetId,$inputData)
+	public function write($inputData)
 	{
 		$data = [];
 		$row_num = 1;
@@ -74,7 +80,7 @@ class InstantGoogleSpreadSheetOutput
 			$requestBody = new Google_Service_Sheets_BatchUpdateSpreadsheetRequest([
 				'requests' => $requests
 			]);
-			$response = $this->service->spreadsheets->batchUpdate($spreadsheetId, $requestBody);
+			$response = $this->service->spreadsheets->batchUpdate($this->spreadsheet->spreadsheetId, $requestBody);
 		}
 
 		// Request insert data
@@ -94,19 +100,18 @@ class InstantGoogleSpreadSheetOutput
 			'data' => $data
 		));
 
-		$response = $this->service->spreadsheets_values->batchUpdate($spreadsheetId,$body);
+		$this->service->spreadsheets_values->batchUpdate($this->spreadsheet->spreadsheetId,$body);
 
-		return $response;
+		return $this;
 	}
 
 	/**
 	 * サービスアカウント以外のユーザーにも権限を付与する（ブラウザから見たいため）
 	 * 
-	 * @param string $spreadsheetId https://docs.google.com/spreadsheets/d/{この部分}/edit#gid=0
 	 * @param string $userGMailAddress gmailアドレス
 	 * @return \Google_Service_Drive_Permission $response
 	 */
-	public function attatchAuthToUser($spreadsheetId,$userGMailAddress)
+	public function attatchAuthToUser($userGMailAddress)
 	{
 		// Google Drive ApisのPermission resourceを作成
 		$permission = new \Google_Service_Drive_Permission([
@@ -116,7 +121,9 @@ class InstantGoogleSpreadSheetOutput
 		]);
 
 		// Permission resourceを割り当て
-		$response = (new \Google_Service_Drive($this->client))->permissions->create($spreadsheetId,$permission);
+		$response = (new \Google_Service_Drive($this->client))
+			->permissions
+			->create($this->spreadsheet->spreadsheetId,$permission);
 
 		return $response;
 	}

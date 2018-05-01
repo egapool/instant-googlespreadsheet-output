@@ -16,22 +16,21 @@ GoogleApisのサービスアカウントが必要（そのうち書く）
 ## 使い方
 
 ```
-// create instanse
-$outputer = new InstantGoogleSpreadSheetOutput('/path/to/youre/spreadsheet-xxxxxxxxx.json');
-
-// create new SpreadSheet
-$response = $outputer->creatSheet();
-
-// insert data
 $data = [
 	['日','月','火','水','木','金','土'],
 	['あれ','これ','それ','これ？','どれ？','それ','えっ'],
 ];
-$outputer->write($response['spreadsheetId'],$data);
 
-// permit others to access this sheet
-$outputer->attatchAuthToUser($response['spreadsheetId'],'test[at]gmail.com');
-echo $response['spreadsheetUrl'];
+// create instanse
+$outputer = new InstantGoogleSpreadSheetOutput('/path/to/youre/spreadsheet-xxxxxxxxx.json');
+
+// create new SpreadSheet
+$outputer
+	->creatSheet() // create new SpreadSheet
+	->write($data) // insert data
+	->attatchAuthToUser('test[at]gmail.com'); // permit others to access this sheet
+
+echo $outputer->spreadsheet->spreadsheetUrl;
 ```
 
 ## やること
