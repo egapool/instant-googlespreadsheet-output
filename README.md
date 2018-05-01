@@ -15,14 +15,22 @@ GoogleApisのサービスアカウントが必要（そのうち書く）
 
 ## 使い方
 
+install
 ```
+composer require egapool/instant-googlespreadsheet-output
+```
+
+```
+require_once __DIR__.'/vendor/autoload.php';
+use InstantGoogleSpreadSheetOutput\Outputer;
+
 $data = [
 	['日','月','火','水','木','金','土'],
 	['あれ','これ','それ','これ？','どれ？','それ','えっ'],
 ];
 
 // create instanse
-$outputer = new InstantGoogleSpreadSheetOutput('/path/to/youre/spreadsheet-xxxxxxxxx.json');
+$outputer = new Outputer('/path/to/youre/spreadsheet-xxxxxxxxx.json');
 
 // create new SpreadSheet
 $outputer
@@ -35,5 +43,4 @@ echo $outputer->spreadsheet->spreadsheetUrl;
 
 ## やること
 
-* composerでinstallできるように体裁整える
 * リポジトリ名がなんかださい
