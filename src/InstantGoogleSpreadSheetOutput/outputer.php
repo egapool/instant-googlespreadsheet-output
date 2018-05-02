@@ -94,6 +94,13 @@ class Outputer
 			$response = $this->service->spreadsheets->batchUpdate($this->spreadsheet->spreadsheetId, $requestBody);
 		}
 
+		// Insert label row
+		$data[] = new Google_Service_Sheets_ValueRange([
+			'range' => 'Sheet1!A'.$row_num,
+			'values' => [array_keys($inputData[0])],
+		]);
+		$row_num++;
+
 		// Request insert data
 		foreach($inputData as $row)
 		{
