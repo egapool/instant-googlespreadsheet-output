@@ -101,7 +101,7 @@ class Outputer
 
 			$data[] = new Google_Service_Sheets_ValueRange([
 				'range' => 'Sheet1!A'.$row_num,
-				'values' => [$row],
+				'values' => [array_values($row)],
 			]);
 			$row_num++;
 		}
