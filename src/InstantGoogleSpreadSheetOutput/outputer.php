@@ -12,8 +12,6 @@ use Google_Service_Sheets_ValueRange;
 use Google_Service_Sheets_BatchUpdateValuesRequest;
 use Google_Service_Drive_Permission;
 
-date_default_timezone_set('Asia/tokyo');
-
 class Outputer
 {
 	/**
