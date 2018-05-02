@@ -106,6 +106,11 @@ class Outputer
 		{
 			if (!is_array($row)) $row = [$row];
 
+			foreach ($row as $key => $value)
+			{
+				if (is_null($value)) $row[$key] = '';
+			}
+
 			$data[] = new Google_Service_Sheets_ValueRange([
 				'range' => 'Sheet1!A'.$row_num,
 				'values' => [array_values($row)],
