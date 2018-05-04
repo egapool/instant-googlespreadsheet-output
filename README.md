@@ -36,7 +36,7 @@ $outputer = new Outputer('/path/to/youre/spreadsheet-xxxxxxxxx.json');
 
 // create new SpreadSheet
 $outputer
-	->creatSheet() // create new SpreadSheet
+	->creatSheet('シートのタイトル') // create new SpreadSheet with title word
 	->write($data) // insert data
 	->attatchAuthToUser('test[at]gmail.com'); // permit others to access this sheet
 
