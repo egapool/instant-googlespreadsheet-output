@@ -50,13 +50,32 @@ class Outputer
 	/**
 	 * 新しくスプレッドシートを作成
 	 * 
+	 * @param str title
 	 * @return self
 	 */
-	public function creatSheet()
+	public function creatSheet($title = null)
 	{
 		// TODO: Assign values to desired properties of `requestBody`:
 		$requestBody = new Google_Service_Sheets_Spreadsheet();
 		$this->spreadsheet = $this->service->spreadsheets->create($requestBody);
+
+		if (!is_null($title))
+		{
+			$requests = [
+				new Google_Service_Sheets_Request([
+					'updateSpreadsheetProperties' => [
+						'properties' => [
+							'title' => $title
+						],
+						'fields' => 'title'
+					]
+				])
+			];
+			$requestBody = new Google_Service_Sheets_BatchUpdateSpreadsheetRequest([
+				'requests' => $requests
+			]);
+			$response = $this->service->spreadsheets->batchUpdate($this->spreadsheet->spreadsheetId, $requestBody);
+		}
 
 		return $this;
 	}
